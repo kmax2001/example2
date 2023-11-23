@@ -14,9 +14,8 @@ namespace raisim {
           gripper_->setName("mygripper");
           gripper_->setControlMode(raisim::ControlMode::PD_PLUS_FEEDFORWARD_TORQUE);
           auto ball = world.addSphere(0.1, 1);
-          ball->setPosition(Eigen::Vector3d(0,-5,0));
+          ball->setPosition(Eigen::Vector3d(0.8,0.4,0));
           auto ground = world.addGround();
-          ball->setPosition(Eigen::Vector3d(0,-3.0,0));
           gcDim_ = gripper_->getGeneralizedCoordinateDim();
           gvDim_ = gripper_->getDOF();
           gJoints = 4;
@@ -99,13 +98,16 @@ namespace raisim {
         bool isTerminalState(float& terminalReward) final{
           terminalReward = float(terminalRewardCoeff_);
 
-          for(auto& contact: gripper_->getContacts())
-            if()
+          for(auto& contact: ball->getContacts())
+            if(0 == contact.getIndexInObjectContactList())
+                return true;
+          return false;
         }
     private:
         int gcDim_, gvDim_, gJoints, nJoints;
         bool visualizable_ = false;
         raisim::ArticulatedSystem *gripper_;
+        raisim::SingleBodyObject *ball;
         Eigen::VectorXd gc_init_, gv_init_, gc_, gv_, pTarget_, gTarget4_, vTarget_;
         double terminalRewardCoeff_ = -10.;
         Eigen::VectorXd actionMean_, actionStd_, obDouble_;

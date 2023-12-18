@@ -1,8 +1,8 @@
 from ruamel.yaml import YAML, dump, RoundTripDumper
 from raisimGymTorch.env.RaisimGymVecEnv import RaisimGymVecEnv as VecEnv
 from raisimGymTorch.helper.raisim_gym_helper import ConfigurationSaver, load_param, tensorboard_launcher
-from raisimGymTorch.env.bin.rsg_anymal import NormalSampler
-from raisimGymTorch.env.bin.rsg_anymal import RaisimGymEnv
+from raisimGymTorch.env.bin.gripper import NormalSampler
+from raisimGymTorch.env.bin.gripper import RaisimGymEnv
 from raisimGymTorch.env.RewardAnalyzer import RewardAnalyzer
 import os
 import math
@@ -32,7 +32,7 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 # directories
 task_path = os.path.dirname(os.path.realpath(__file__))
-home_path = task_path + "/.."
+home_path = task_path + "/../../../../.."
 print(task_path)
 
 # config
@@ -64,7 +64,7 @@ critic = ppo_module.Critic(ppo_module.MLP(cfg['architecture']['value_net'], nn.L
                            device)
 
 saver = ConfigurationSaver(log_dir=home_path + "/raisimGymTorch/data/"+task_name,
-                           save_items=[task_path + "/cfg.yaml", task_path + "/example.cpp"])
+                           save_items=[task_path + "/cfg.yaml", task_path + "/example.hpp"])
 tensorboard_launcher(saver.data_dir+"/..")  # press refresh (F5) after the first ppo update
 
 ppo = PPO.PPO(actor=actor,

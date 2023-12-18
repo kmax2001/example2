@@ -6,5 +6,5 @@ CXX_DEFINES = -DdIDEDOUBLE
 
 CXX_INCLUDES = -I/usr/include/eigen3 -I/home/kimyoungho/raisimLib/examples/include -isystem /home/kimyoungho/raisimLib/raisim/linux/include
 
-CXX_FLAGS = 
+CXX_FLAGS = -O3 -DNDEBUG
 

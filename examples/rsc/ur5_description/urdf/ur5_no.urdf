@@ -1,0 +1,175 @@
+<?xml version="1.0"?>
+<robot name="ur5">
+  <!-- Inertia parameters -->
+
+
+  <!-- Kinematic model -->
+  <!-- Properties from urcontrol.conf -->
+  <!--
+    DH for UR5:
+    a = [0.00000, -0.42500, -0.39225,  0.00000,  0.00000,  0.0000]
+    d = [0.089159,  0.00000,  0.00000,  0.10915,  0.09465,  0.0823]
+    alpha = [ 1.570796327, 0, 0, 1.570796327, -1.570796327, 0 ]
+    q_home_offset = [0, -1.570796327, 0, -1.570796327, 0, 0]
+    joint_direction = [-1, -1, 1, 1, 1, 1]
+    mass = [3.7000, 8.3930, 2.2750, 1.2190, 1.2190, 0.1879]
+    center_of_mass = [ [0, -0.02561, 0.00193], [0.2125, 0, 0.11336], [0.11993, 0.0, 0.0265], [0, -0.0018, 0.01634], [0, 0.0018,0.01634], [0, 0, -0.001159] ]
+  -->
+ 
+  <!--property name="shoulder_height" value="0.089159" /-->
+  <!--property name="shoulder_offset" value="0.13585" /-->  <!-- shoulder_offset - elbow_offset + wrist_1_length = 0.10915 -->
+  <!--property name="upper_arm_length" value="0.42500" /-->
+  <!--property name="elbow_offset" value="0.1197" /-->       <!-- CAD measured -->
+  <!--property name="forearm_length" value="0.39225" /-->
+  <!--property name="wrist_1_length" value="0.093" /-->     <!-- CAD measured -->
+  <!--property name="wrist_2_length" value="0.09465" /-->   <!-- In CAD this distance is 0.930, but in the spec it is 0.09465 -->
+  <!--property name="wrist_3_length" value="0.0823" /-->
+
+    <link name="base_link">
+      <visual>
+        <geometry>
+          <mesh filename="../meshes/visual/base.dae" scale = "0.001 0.001 0.001" />
+        </geometry>
+        <material name="LightGrey">
+          <color rgba="0.3 0.3 0.7 1.0"/>
+        </material>
+      </visual>
+    </link>
+    <joint name="shoulder_pan_joint" type="revolute">
+      <parent link="base_link" />
+      <child link = "shoulder_link" />
+      <origin xyz="0.0 0.0 0.089159" rpy="0.0 0.0 0.0" />
+      <axis xyz="0 0 1" />
+      <limit lower="-6.28" upper="6.28" effort="150.0" velocity="3.15"/>
+      <dynamics damping="0.0" friction="0.0"/>
+    </joint>
+
+    <link name="shoulder_link">
+      <visual>
+        <origin rpy= "3 3 0" xyz= "0 0 0.0845795"/> 
+        <geometry>
+          <mesh filename="../meshes/ur5/visual/shoulder.dae" scale= "0.001 0.001 0.001"/>
+        </geometry>
+        <material name="LightGrey">
+          <color rgba="0.0 1.0 0.5 1.0"/>
+        </material>
+      </visual>
+    </link>
+
+    <joint name="shoulder_lift_joint" type="revolute">
+      <parent link="shoulder_link" />
+      <child link = "upper_arm_link" />
+      <origin xyz="0.0 0.13585 0.0" rpy="0.0 1.570796327 0.0" />
+      <axis xyz="0 1 0" />
+      <limit lower="-6.283185307" upper="6.283185307" effort="150.0" velocity="3.15"/>
+      <dynamics damping="0.0" friction="0.0"/>
+    </joint>
+
+    <link name="upper_arm_link">
+      <visual>
+      	<origin xyz="0.28 1.0 1.0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="../meshes/ur5/visual/upperarm.dae" />
+        </geometry>
+        <material name="LightGrey">
+          <color rgba="0.7 0.7 0.7 1.0"/>
+        </material>
+      </visual>
+    </link>
+
+    <joint name="elbow_joint" type="revolute">
+      <parent link="upper_arm_link" />
+      <child link = "forearm_link" />
+      <origin xyz="0.0 0.1197 0.42500" rpy="0.0 0.0 0.0" />
+      <axis xyz="0 1 0" />
+      <limit lower="-3.141592654" upper="3.141592654" effort="150.0" velocity="3.15"/>
+      <dynamics damping="0.0" friction="0.0"/>
+    </joint>
+
+    <link name="forearm_link">
+      <visual>
+      	<origin xyz="0.0 0.0 0.50" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="../meshes/ur5/visual/forearm.dae" />
+        </geometry>
+        <material name="LightGrey">
+          <color rgba="0.7 0.7 0.7 1.0"/>
+        </material>
+      </visual>
+    </link>
+
+    <joint name="wrist_1_joint" type="revolute">
+      <parent link="forearm_link" />
+      <child link = "wrist_1_link" />
+      <origin xyz="0.0 0.0 0.39225" rpy="0.0 1.570796327 0.0" />
+      <axis xyz="0 1 0" />
+      <limit lower="-6.283185307" upper="6.283185307" effort="28.0" velocity="3.2"/>
+      <dynamics damping="0.0" friction="0.0"/>
+    </joint>
+
+    <link name="wrist_1_link">
+      <visual>
+      	<origin xyz="1.0 1.0 0.06" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="../meshes/ur5/visual/wrist1.dae" />
+        </geometry>
+        <material name="LightGrey">
+          <color rgba="0.7 0.7 0.7 1.0"/>
+        </material>
+      </visual>
+    </link>
+
+    <joint name="wrist_2_joint" type="revolute">
+      <parent link="wrist_1_link" />
+      <child link = "wrist_2_link" />
+      <origin xyz="0.0 0.093 0.0" rpy="0.0 0.0 0.0" />
+      <axis xyz="0 0 1" />
+      <limit lower="-6.283185307" upper="6.283185307" effort="28.0" velocity="3.2"/>
+      <dynamics damping="0.0" friction="0.0"/>
+    </joint>
+
+    <link name="wrist_2_link">
+      <visual>
+        <geometry>
+          <mesh filename="../meshes/ur5/visual/wrist2.dae" />
+        </geometry>
+        <material name="LightGrey">
+          <color rgba="0.7 0.7 0.7 1.0"/>
+        </material>
+      </visual>
+    </link>
+
+    <joint name="wrist_3_joint" type="revolute">
+      <parent link="wrist_2_link" />
+      <child link = "wrist_3_link" />
+      <origin xyz="0.0 0.0 0.09465" rpy="0.0 0.0 0.0" />
+      <axis xyz="0 1 0" />
+      <limit lower="-6.283185307" upper="6.283185307" effort="28.0" velocity="3.2"/>
+      <dynamics damping="0.0" friction="0.0"/>
+    </joint>
+
+    <link name="wrist_3_link">
+      <visual>
+        <geometry>
+          <mesh filename="../meshes/ur5/visual/wrist3.dae" />
+        </geometry>
+        <material name="LightGrey">
+          <color rgba="0.7 0.7 0.7 1.0"/>
+        </material>
+      </visual>
+    </link>
+
+    <joint name="ee_fixed_joint" type="fixed">
+      <parent link="wrist_3_link" />
+      <child link = "ee_link" />
+      <origin xyz="0.0 0.0823 0.0" rpy="0.0 0.0 1.570796327" />
+    </joint>
+
+    <link name="ee_link">
+    </link>
+
+    <!-- ROS base_link to UR 'Base' Coordinates transform -->
+
+    <!-- Frame coincident with all-zeros TCP on UR controller -->
+
+</robot>

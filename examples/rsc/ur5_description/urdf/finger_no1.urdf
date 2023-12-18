@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<robot name="finger">
+    <link name="base">
+    </link>
+    <!-- Frame coincident with all-zeros TCP on UR controller -->
+    <joint name="robotiq_85_base_joint" type="fixed">
+        <parent link="base"/>
+        <child link="robotiq_85_base_link"/>
+    </joint>
+    <link name="robotiq_85_base_link">
+        <visual>
+            <geometry>
+                <mesh filename="../meshes/ur5/visual/robotiq_85_base_link.dae"/>
+            </geometry>
+        </visual>
+        <inertial>
+            <mass value="0.636951" />
+            <origin xyz="0.0 0.0 0.0" />
+            <inertia ixx = "0.000380" ixy = "0.000000" ixz = "0.000000" iyy = "0.001110" iyz = "0.000000" izz = "0.001171" />
+        </inertial>
+    </link>
+</robot>

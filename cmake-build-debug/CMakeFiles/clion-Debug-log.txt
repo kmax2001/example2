@@ -1,4 +1,12 @@
-Cannot generate into /home/kimyoungho/raisimLib/example2
-It is already used for project /home/kimyoungho/raisimLib
-
-Please either delete it manually or select another generation directory
+/home/kimyoungho/clion-2023.2.2/bin/cmake/linux/x64/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/home/kimyoungho/clion-2023.2.2/bin/ninja/linux/x64/ninja -G Ninja -S /home/kimyoungho/raisimLib/example2 -B /home/kimyoungho/raisimLib/example2/cmake-build-debug
+-- pybind11 v2.9.0 
+-- raisim:
+--   Version: 1.1.7
+--   Includes: /home/kimyoungho/raisimLib/raisim/linux/include
+--   Libraries: raisim::raisimPng;raisim::raisimODE;raisim::raisimMine;raisim::raisim
+raisim os linux
+raisim arch 
+[RAISIM_GYM] BUILDING THE DEBUG APP for gripper
+-- Configuring done (0.1s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/kimyoungho/raisimLib/example2/cmake-build-debug

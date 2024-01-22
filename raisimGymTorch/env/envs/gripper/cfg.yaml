@@ -3,7 +3,7 @@ record_video: yes
 
 environment:
   render: True
-  # just testing commenting
+  # just testing commenting 원래는 num_envs가 100
   num_envs: 100
   eval_every_n: 200
   num_threads: 30
@@ -12,10 +12,14 @@ environment:
   max_time: 4.0
   action_std: 0.3
   reward:
-    forwardVel:
-      coeff: 0.3
     torque:
       coeff: -4e-5
+    ballheight:
+      coeff: 10.0
+    balldist:
+      coeff: -10.0
+    touches:
+      coeff: 1.0
 
 architecture:
   policy_net: [128, 128]

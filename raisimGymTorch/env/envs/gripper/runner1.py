@@ -33,7 +33,8 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 # directories
 task_path = os.path.dirname(os.path.realpath(__file__))
 home_path = task_path + "/../../../../.."
-print(task_path)
+print(home_path)
+
 
 # config
 cfg = YAML().load(open(task_path + "/cfg.yaml", 'r'))
@@ -64,7 +65,7 @@ critic = ppo_module.Critic(ppo_module.MLP(cfg['architecture']['value_net'], nn.L
                            device)
 
 saver = ConfigurationSaver(log_dir=home_path + "/raisimGymTorch/data/"+task_name,
-                           save_items=[task_path + "/cfg.yaml", task_path + "/example.hpp"])
+                           save_items=[task_path + "/cfg.yaml", task_path + "/Environment1.hpp"])
 tensorboard_launcher(saver.data_dir+"/..")  # press refresh (F5) after the first ppo update
 
 ppo = PPO.PPO(actor=actor,
@@ -110,7 +111,7 @@ for update in range(1000000):
         for step in range(n_steps):
             with torch.no_grad():
                 frame_start = time.time()
-                obs = env.observe(False)
+                obs = env.observe(update_statistics=False)
                 action = loaded_graph.architecture(torch.from_numpy(obs).cpu())
                 reward, dones = env.step(action.cpu().detach().numpy())
                 reward_analyzer.add_reward_info(env.get_reward_info())
@@ -134,8 +135,8 @@ for update in range(1000000):
         ppo.step(value_obs=obs, rews=reward, dones=dones)
         done_sum = done_sum + np.sum(dones)
         reward_sum = reward_sum + np.sum(reward)
-
     # take st step to get value obs
+
     obs = env.observe()
     ppo.update(actor_obs=obs, value_obs=obs, log_this_iteration=update % 10 == 0, update=update)
     average_ll_performance = reward_sum / total_steps
@@ -149,7 +150,7 @@ for update in range(1000000):
     env.curriculum_callback()
 
     end = time.time()
-
+    print(action)
     print('----------------------------------------------------')
     print('{:>6}th iteration'.format(update))
     print('{:<40} {:>6}'.format("average ll reward: ", '{:0.10f}'.format(average_ll_performance)))
